@@ -23,6 +23,8 @@ module TwittyConsole
       cui = TwittyConsole::CUI.new
       cui.handler = TwittyConsole::PostHandler.new
 
+      Signal.trap(:INT, "EXIT")
+
       threads = []
       threads << Thread.start do
         loop do
