@@ -14,9 +14,6 @@
 
 require 'rubygems'
 
-require 'activeresource'
-require 'net/http'
-
 require 'twitty-console/account.rb'
 require 'twitty-console/config.rb'
 require 'twitty-console/cui.rb'
