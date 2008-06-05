@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'twitty-console'
+
+TwittyConsole::Runner.run
+
+
