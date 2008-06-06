@@ -15,10 +15,13 @@
 require 'ncurses'
 
 module TwittyConsole #:nodoc:
+  MAX_SIZE = 140
+
   class CUI
     attr_writer :handler
 
     def initialize
+      @clipboard = ''
       initialize_ncurses
       initialize_display_window
       initialize_form_window
@@ -34,27 +37,45 @@ module TwittyConsole #:nodoc:
       @display_window.attrset(Ncurses.COLOR_PAIR(2))
       @display_window.addstr(text)
       @display_window.addstr("\n")
-
+      
       @display_window.refresh
     end
 
     def start
-      buf = ""
       loop do
         case c = @form_window.getch
         when -1
-        when 10 # "\n"
-          @handler.handle buf
-          reset_form_window
-          buf = ""
+        when ?\n, ?\r, ?\C-m
+          @input_form.form_driver(Ncurses::Form::REQ_BEG_LINE);
+          text = @input_field.field_buffer(0)
+          text.strip!
+          @handler.handle text unless text.empty?
+          @input_form.form_driver(Ncurses::Form::REQ_CLR_FIELD);
+        when Ncurses::KEY_BACKSPACE, ?\C-h
+          @input_form.form_driver(Ncurses::Form::REQ_DEL_PREV);
+        when ?\C-d
+          @input_form.form_driver(Ncurses::Form::REQ_DEL_CHAR);
+        when Ncurses::KEY_LEFT, ?\C-b
+          @input_form.form_driver(Ncurses::Form::REQ_PREV_CHAR);
+        when Ncurses::KEY_RIGHT, ?\C-f
+          @input_form.form_driver(Ncurses::Form::REQ_NEXT_CHAR);
+        when ?\C-a
+          @input_form.form_driver(Ncurses::Form::REQ_BEG_LINE);
+        when ?\C-e
+          @input_form.form_driver(Ncurses::Form::REQ_END_LINE);
+        when ?\C-k
+          @input_form.form_driver(Ncurses::Form::REQ_CLR_EOL);
         else
-          buf << c.chr
+          @input_form.form_driver(c)
         end
         sleep 0.01
       end
     end
 
     def stop
+      @input_form.unpost_form
+      @input_form.free_form
+      @input_field.free_field
       Ncurses.endwin
     end
 
@@ -63,6 +84,7 @@ module TwittyConsole #:nodoc:
       Ncurses.initscr
       Ncurses.start_color
       Ncurses.cbreak
+      Ncurses.noecho
 
       Ncurses.init_pair(1, Ncurses::COLOR_CYAN,  Ncurses::COLOR_BLACK);
       Ncurses.init_pair(2, Ncurses::COLOR_WHITE, Ncurses::COLOR_BLACK);
@@ -78,16 +100,17 @@ module TwittyConsole #:nodoc:
 
     def initialize_form_window
       @form_window = Ncurses::WINDOW.new(1, Ncurses.COLS, Ncurses.LINES - 1, 0)
+      @form_window.keypad(true)
       @form_window.nodelay(true)
-      @form_window.move(0, 0)
-      @form_window.addstr("> ")
-      @form_window.refresh
-    end
 
-    def reset_form_window
-      @form_window.erase
-      @form_window.move(0, 0)
-      @form_window.addstr("> ")
+      @input_field = Ncurses::Form::FIELD.new(1, Ncurses.COLS - 2, 0, 2, 0, 0)
+      @input_field.set_max_field(TwittyConsole::MAX_SIZE)
+
+      @input_form = Ncurses::Form::FORM.new([@input_field])
+      @input_form.set_form_win(@form_window)
+      @input_form.post_form
+
+      @form_window.mvprintw(0, 0, "> ")
       @form_window.refresh
     end
   end

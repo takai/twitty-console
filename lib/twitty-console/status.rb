@@ -34,4 +34,7 @@ module TwittyConsole
                       :source => TwittyConsole::APPLICATION_NAME)
     end
   end
+
+  class User < ActiveResource::Base
+  end
 end
