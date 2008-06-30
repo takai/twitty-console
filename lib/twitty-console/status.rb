@@ -15,7 +15,7 @@
 require 'activeresource'
 
 module TwittyConsole
-  APPLICATION_NAME = 'TwittyConsole'
+  APPLICATION_NAME = 'twittyconsole'
 
   class Status < ActiveResource::Base
     @@previous_statuses = []
