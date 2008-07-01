@@ -28,9 +28,13 @@ module TwittyConsole
       threads = []
       threads << Thread.start do
         loop do
-          statuses = TwittyConsole::Status.friends_timeline
-          for status in statuses.sort_by{|s| s.created_at }
-            cui.print status
+          begin
+            statuses = TwittyConsole::Status.friends_timeline
+            for status in statuses.sort_by{|s| s.created_at }
+              cui.print status
+            end
+          rescue
+            cui.warn $!.message
           end
           sleep interval
         end

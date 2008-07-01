@@ -41,6 +41,14 @@ module TwittyConsole #:nodoc:
       @display_window.refresh
     end
 
+    def warn message
+      @display_window.attrset(Ncurses.COLOR_PAIR(3))
+      @display_window.addstr(message)
+      @display_window.addstr("\n")
+
+      @display_window.refresh
+    end
+
     def start
       loop do
         case c = @form_window.getch
@@ -88,6 +96,7 @@ module TwittyConsole #:nodoc:
 
       Ncurses.init_pair(1, Ncurses::COLOR_CYAN,  Ncurses::COLOR_BLACK);
       Ncurses.init_pair(2, Ncurses::COLOR_WHITE, Ncurses::COLOR_BLACK);
+      Ncurses.init_pair(3, Ncurses::COLOR_RED, Ncurses::COLOR_BLACK);
     end
 
     def initialize_display_window
