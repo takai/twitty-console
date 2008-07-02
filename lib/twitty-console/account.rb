@@ -20,6 +20,8 @@ module TwittyConsole
       hash = connection.get('/account/rate_limit_status.xml', headers)
       rate = hash['hourly_limit']
       rate.to_i
+    rescue
+      60
     end
   end
 end
