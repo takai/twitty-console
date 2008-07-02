@@ -11,6 +11,26 @@ TwittyConsole requires following libraries.
 - ncurses-ruby
   http://ncurses-ruby.berlios.de/
 
+= Setup
+
+To set up twitty-console, put your .twitty-console file in the home
+directory.
+
+Here is the .twitty-console file's example:
+
+== $HOME/.twitty-console
+
+example:
+
+  twitter:
+    user: username
+    password: password
+  proxy:
+    host: proxy-server.com
+    port: 8080
+    user: proxy-username
+    password: proxy-password
+
 = FAQ
 
 Q:: Does TwittyConsole support UTF-8?
