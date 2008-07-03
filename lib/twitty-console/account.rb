@@ -17,7 +17,8 @@ require 'activeresource'
 module TwittyConsole
   class Account < ActiveResource::Base
     def self.rate_limit_status
-      hash = connection.get('/account/rate_limit_status.xml', headers)
+      url = '/account/rate_limit_status.' + self.connection.format.extension
+      hash = connection.get(url, headers)
       rate = hash['hourly_limit']
       rate.to_i
     rescue

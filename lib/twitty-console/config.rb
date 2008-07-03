@@ -24,8 +24,11 @@ module TwittyConsole
       pass = conf['twitter']['password']
       site = conf['twitter']['site'] || 'twitter.com'
       prot = conf['twitter']['protocol'] || 'https'
+      frmt = conf['twitter']['format'] || 'xml'
 
       ActiveResource::Base.site = "#{prot}://#{user}:#{pass}@#{site}"
+      ActiveResource::Base.format = frmt.to_sym
+      ActiveResource::Base.logger = Logger.new(STDERR) if $DEBUG
       
       if conf['proxy']
         proxy_host = conf['proxy']['host']

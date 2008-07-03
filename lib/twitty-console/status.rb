@@ -21,7 +21,8 @@ module TwittyConsole
     @@previous_statuses = []
     
     def self.friends_timeline
-      statuses = self.find(:all, :from => '/statuses/friends_timeline.xml')
+      url = '/statuses/friends_timeline.' + self.connection.format.extension
+      statuses = self.find(:all, :from => url)
       updated_statuses = statuses - @@previous_statuses
       @@previous_statuses = statuses
       

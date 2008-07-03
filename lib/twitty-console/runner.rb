@@ -30,7 +30,7 @@ module TwittyConsole
         loop do
           begin
             statuses = TwittyConsole::Status.friends_timeline
-            for status in statuses.sort_by{|s| s.created_at }
+            for status in statuses.reverse
               cui.print status
             end
           rescue
