@@ -8,8 +8,8 @@ TwittyConsole requires following libraries.
 
 - ActiveResource
   http://rubyonrails.org
-- ncurses-ruby
-  http://ncurses-ruby.berlios.de/
+- Term::ANSIColor
+  http://term-ansicolor.rubyforge.org/
 
 = Setup
 
@@ -30,74 +30,5 @@ example:
     port: 8080
     user: proxy-username
     password: proxy-password
-
-= FAQ
-
-Q:: Does TwittyConsole support UTF-8?
-A:: ncurses-ruby does not support UTF-8 by default, so you need to
-    apply patch (following).
-
-   Index: extconf.rb
-   ===================================================================
-   RCS file: /cvsroot/ncurses-ruby/ncurses-ruby/extconf.rb,v
-   retrieving revision 1.11
-   diff -u -r1.11 extconf.rb
-   --- extconf.rb       26 Feb 2005 22:51:45 -0000      1.11
-   +++ extconf.rb       5 Jun 2008 15:05:47 -0000
-   @@ -36,8 +36,8 @@
-      raise "ncurses header file not found"
-    end
-   
-   -if have_library("ncurses", "wmove")
-   -  curses_lib = "ncurses"
-   +if have_library("ncursesw", "wmove")
-   +  curses_lib = "ncursesw"
-    elsif have_library("pdcurses", "wmove")
-      curses_lib = "pdcurses"
-    else
-   @@ -121,11 +121,11 @@
-   
-    puts "checking for the panel library..."
-    if have_header("panel.h")
-   -  have_library("panel", "panel_hidden")
-   +  have_library("panelw", "panel_hidden")
-    end
-    puts "checking for the form library..."
-    if have_header("form.h")
-   -  have_library("form", "new_form")
-   +  have_library("formw", "new_form")
-    end
-   
-    create_makefile('ncurses_bin')
-   Index: ncurses_wrap.c
-   ===================================================================
-   RCS file: /cvsroot/ncurses-ruby/ncurses-ruby/ncurses_wrap.c,v
-   retrieving revision 1.13
-   diff -u -r1.13 ncurses_wrap.c
-   --- ncurses_wrap.c   19 Jun 2006 09:46:59 -0000      1.13
-   +++ ncurses_wrap.c   5 Jun 2008 15:05:49 -0000
-   @@ -2694,6 +2694,8 @@
-    }
-    void Init_ncurses_bin(void)
-    {
-   +    setlocale(LC_ALL, "");
-   +
-        mNcurses = rb_define_module("Ncurses");
-        eNcurses = rb_define_class_under(mNcurses, "Exception", rb_eRuntimeError);
-        rb_iv_set(mNcurses, "@windows_hash", rb_hash_new());
-   Index: ncurses_wrap.h
-   ===================================================================
-   RCS file: /cvsroot/ncurses-ruby/ncurses-ruby/ncurses_wrap.h,v
-   retrieving revision 1.2
-   diff -u -r1.2 ncurses_wrap.h
-   --- ncurses_wrap.h   31 Jul 2004 08:35:13 -0000      1.2
-   +++ ncurses_wrap.h   5 Jun 2008 15:05:49 -0000
-   @@ -81,7 +81,7 @@
-    #    include <curses.h>
-    #  endif
-    #endif
-   -
-   +#include <locale.h>
-    #include <ruby.h>
-   
-    extern VALUE mNcurses;  /* module Ncurses */
+  cui:
+    encoding: UTF-8

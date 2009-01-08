@@ -40,6 +40,10 @@ module TwittyConsole
         ActiveResource::Connection.proxy_port = proxy_port
         ActiveResource::Connection.proxy_user = proxy_user
         ActiveResource::Connection.proxy_password = proxy_pass
+        
+        if conf['cui']
+          TwittyConsole::CUI.encoding = conf['cui']['encoding']
+        end
       end
     end
   end

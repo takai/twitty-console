@@ -30,9 +30,7 @@ module TwittyConsole
         loop do
           begin
             statuses = TwittyConsole::Status.friends_timeline
-            for status in statuses.reverse
-              cui.print status
-            end
+            cui.output statuses unless statuses.empty?
           rescue
             cui.warn $!.message
           end

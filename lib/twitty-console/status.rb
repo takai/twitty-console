@@ -18,15 +18,17 @@ module TwittyConsole
   APPLICATION_NAME = 'twittyconsole'
 
   class Status < ActiveResource::Base
-    @@previous_statuses = []
-    
+    @@since_id = nil
+
     def self.friends_timeline
       url = '/statuses/friends_timeline.' + self.connection.format.extension
+      if @@since_id
+        url += "?since_id=#{@@since_id}"
+      end
+
       statuses = self.find(:all, :from => url)
-      updated_statuses = statuses - @@previous_statuses
-      @@previous_statuses = statuses
-      
-      updated_statuses
+      @@since_id = statuses.first.attributes['id'] if statuses.first
+      statuses.reverse
     end
 
     def update
