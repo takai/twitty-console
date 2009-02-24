@@ -4,12 +4,7 @@ TwittyConsole is a console based client for Twitter.
 
 = Install
 
-TwittyConsole requires following libraries.
-
-- ActiveResource
-  http://rubyonrails.org
-- Term::ANSIColor
-  http://term-ansicolor.rubyforge.org/
+  $ sudo gem install takai-twitty-console --source http://gems.github.com
 
 = Setup
 
@@ -30,5 +25,3 @@ example:
     port: 8080
     user: proxy-username
     password: proxy-password
-  cui:
-    encoding: UTF-8
