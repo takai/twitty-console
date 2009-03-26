@@ -3,7 +3,7 @@
 Gem::Specification.new do |spec|
   spec.name = "twitty-console"
   spec.summary = "Console-based Twitter Client"
-  spec.version = "0.2.0"
+  spec.version = "0.2.1"
   spec.author = "Naoto Takai"
   spec.email = "takai@recompile.net"
   
