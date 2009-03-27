@@ -15,7 +15,9 @@
 module TwittyConsole
   class PostHandler
     def handle text
-      TwittyConsole::Status.new(:status => text).update
+      unless text.nil? || text.strip.empty? || /^@\w+$/ === text
+        TwittyConsole::Status.new(:status => text).update
+      end
     end
   end
 end

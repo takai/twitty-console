@@ -48,11 +48,7 @@ module TwittyConsole #:nodoc:
     
     def start
       while text = Readline.readline(PROMPT, true)
-        break if text.nil?
-        
-        unless text.strip.empty?
-          @handler.handle(Iconv.conv('UTF-8', @@encoding, text))
-        end
+        @handler.handle(Iconv.conv('UTF-8', @@encoding, text))
       end
     end
     
