@@ -12,6 +12,7 @@
 #  See the License for the specific language governing permissions and
 #  limitations under the License.
 
+require 'cgi'
 require 'iconv'
 require 'readline'
 require 'term/ansicolor'
@@ -34,6 +35,7 @@ module TwittyConsole #:nodoc:
       statuses.each do |status|
         screen_name = status.user.screen_name
         text = Iconv.conv(@@encoding, 'UTF-8', status.text)
+        text = CGI.unescapeHTML(text)
         
         puts "%s: %s" % [blue(screen_name), text]
       end
