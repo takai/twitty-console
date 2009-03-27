@@ -62,6 +62,7 @@ module TwittyConsole #:nodoc:
     def prompt
       print PROMPT
       STDOUT.flush
+      Readline.refresh_line
     end
   end
 end
